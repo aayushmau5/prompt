@@ -11,10 +11,11 @@ defmodule Prompt.IO.Text do
           background_color: any(),
           trim: boolean(),
           min: integer(),
-          max: integer()
+          max: integer(),
+          default_answer: String.t(),
         }
 
-  defstruct [:question, :color, :background_color, :trim, :min, :max]
+  defstruct [:question, :color, :background_color, :trim, :min, :max, :default_answer]
 
   @doc ""
   def new(question, options) do
@@ -24,18 +25,23 @@ defmodule Prompt.IO.Text do
       background_color: Keyword.get(options, :background_color),
       trim: Keyword.get(options, :trim),
       min: Keyword.get(options, :min, 0),
-      max: Keyword.get(options, :max, 0)
+      max: Keyword.get(options, :max, 0),
+      default_answer: Keyword.get(options, :default_answer, "")
     }
   end
 
   defimpl Prompt.IO do
     @spec display(Prompt.IO.Text.t()) :: Prompt.IO.Text.t()
     def display(txt) do
+      default =
+        if String.length(txt.default_answer) == 0,
+          do: "",
+          else: "(default: #{txt.default_answer})"
       [
         :reset,
         background_color(txt),
         txt.color,
-        "#{txt.question}: ",
+        "#{txt.question}#{default}: ",
         :reset,
         without_newline(txt.trim)
       ]

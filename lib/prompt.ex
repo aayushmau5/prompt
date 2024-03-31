@@ -198,7 +198,12 @@ defmodule Prompt do
                     type: :integer,
                     default: 0,
                     doc: "The maximum charactors required for input"
-                  ]
+                  ],
+                  default_answer: [
+                    type: :string,
+                    default: "",
+                    doc: "Default value"
+                  ],
                 )
 
   @doc section: :input
